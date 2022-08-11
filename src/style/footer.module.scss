@@ -1,0 +1,29 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    height: 4.4rem;
+    background-color: var(--base-color-white);
+    box-shadow: 0 .2rem .6rem .2rem #ddd;
+
+    .footerLi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+
+
+        .footerLiTitle {
+            font-size: .8rem;
+            margin-top: .2rem;
+        }
+    }
+}
+
+.activeLi {
+    color: var(--adm-color-primary);
+}
