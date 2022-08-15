@@ -140,7 +140,7 @@
 
                 .recommendList {
                     display: flex;
-                    width: 100%;
+                    height: 100%;
                     overflow-x: scroll;
                     -webkit-overflow-scrolling: touch;
 
@@ -159,9 +159,14 @@
                     }
 
                     .recommendMore {
-                        width: 8rem;
-                        height: 100%;
-                        background-color: var(--base-font-gray);
+                        flex-shrink: 0;
+                        width: 7rem;
+                        height: 8rem;
+                        line-height: 8rem;
+                        text-align: center;
+                        color: var(--base-font-color);
+                        font-size: var(--base-font-size);
+                        background-color: #e4e4e4;
                     }
                 }
             }

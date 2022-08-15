@@ -102,7 +102,7 @@ function Index(props) {
           </Swiper>
         </div>
         <div className={style.main}>
-          {/* 推荐品牌 */}
+          {/* 推荐商品 */}
           <Floor
             floorTitle='推荐商品'
             rightWriting='全部'
