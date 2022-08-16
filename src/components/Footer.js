@@ -1,10 +1,10 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { AppOutline, ContentOutline, SystemQRcodeOutline, UserOutline } from 'antd-mobile-icons'
+import { AppOutline, TruckOutline, SystemQRcodeOutline, UserOutline } from 'antd-mobile-icons'
 
 import style from '../style/footer.module.scss'
 
-export default function Footer() {
+export default function Footer () {
   const footerList = [
     {
       id: 1,
@@ -12,17 +12,18 @@ export default function Footer() {
       path: '/index',
       icon: <AppOutline fontSize={26} />,
     },
+
     {
       id: 2,
-      title: '品牌馆',
-      path: '/brand',
-      icon: <ContentOutline fontSize={26} />,
-    },
-    {
-      id: 3,
       title: '分类',
       path: '/category',
       icon: <SystemQRcodeOutline fontSize={26} />,
+    },
+    {
+      id: 3,
+      title: '购物车',
+      path: '/cart',
+      icon: <TruckOutline fontSize={26} />,
     },
     {
       id: 4,

@@ -7,11 +7,13 @@ import SubNav from './index/SubNav'
 import Floor from './index/Floor'
 import ProductItem from './index/ProductItem'
 import RecommendItem from './index/RecommendItem'
+import Brand from './index/Brand'
 
 import style from '../style/index.module.scss'
 
-function Index(props) {
+function Index (props) {
   const colors = ['#ace0ff', '#bcffbd', '#e4fabd', '#ffcfac'] // 测试
+  // 推荐标题
   const recommend = [
     {
       id: 1,
@@ -26,6 +28,54 @@ function Index(props) {
       title: '小米',
     },
   ]
+
+  // 品牌馆
+  const brand = [{
+    id: 1,
+    name: '联想',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: false
+  }, {
+    id: 2,
+    name: '小米',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: true
+  }, {
+    id: 3,
+    name: '苹果',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: true
+  }, {
+    id: 4,
+    name: '戴尔',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: true
+  }, {
+    id: 5,
+    name: '苹果',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: false
+  }, {
+    id: 6,
+    name: '小米',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: false
+  }, {
+    id: 7,
+    name: '联想',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: false
+  }, {
+    id: 8,
+    name: '戴尔',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: false
+  }, {
+    id: 9,
+    name: '联想',
+    img: 'https://img.alicdn.com/imgextra/i1/2932013060/O1CN01M3axyi1YTWjgMOsma_!!2932013060.png',
+    isMessage: true
+  }]
 
   const [subVisible, setSubVisible] = useState(false)
 
@@ -147,25 +197,13 @@ function Index(props) {
               <ProductItem></ProductItem>
             </div>
           </Floor>
+
+          {/* 底部 */}
+          <Floor floorTitle='品牌馆' rightWriting='更多'>
+            <Brand brandObj={brand}></Brand>
+          </Floor>
         </div>
 
-        {/* 底部 */}
-        <div className={style.bottom}>
-          <Grid columns={4} gap={0}>
-            <Grid.Item>
-              <div className={style.bottomItem}>A</div>
-            </Grid.Item>
-            <Grid.Item>
-              <div className={style.bottomItem}>A</div>
-            </Grid.Item>
-            <Grid.Item>
-              <div className={style.bottomItem}>A</div>
-            </Grid.Item>
-            <Grid.Item>
-              <div className={style.bottomItem}>A</div>
-            </Grid.Item>
-          </Grid>
-        </div>
 
         {/* 页脚 */}
         <div className={style.footer}>@大悬崖</div>
