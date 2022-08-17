@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { NavBar, Popup, Swiper, Grid, Tabs } from 'antd-mobile'
+import { connect } from 'react-redux'
+import { NavBar, Popup, Swiper, Image, Tabs } from 'antd-mobile'
 import { UnorderedListOutline, SearchOutline } from 'antd-mobile-icons'
 import { withViewStyle } from '../HOC/withViewStyle'
 
@@ -10,8 +11,17 @@ import RecommendItem from './index/RecommendItem'
 import Brand from './index/Brand'
 
 import style from '../style/index.module.scss'
+import { getIndexData } from '../redux/actionCreator/indexDataActionCreator'
+
 
 function Index (props) {
+
+  // 资源服务器地址
+  const base_url = 'http://www.codeboy.com:9999/'
+
+  const { getIndexData, indexDataList } = props
+  const { carouselItems, newArrivalItems, recommendedItems, topSaleItems } = indexDataList // 需要的列表数据
+
   const colors = ['#ace0ff', '#bcffbd', '#e4fabd', '#ffcfac'] // 测试
   // 推荐标题
   const recommend = [
@@ -79,20 +89,32 @@ function Index (props) {
 
   const [subVisible, setSubVisible] = useState(false)
 
+  useEffect(() => {
+    console.log('indexDataList:', indexDataList)
+    if (indexDataList.length === 0) {
+      getIndexData()
+    }
+
+  }, [indexDataList])
+
   const showSubNav = () => {
     setSubVisible(true)
   }
 
-  const navRight = <div className={style.region}>地区</div>
+  // ==============================================ReactNode====================================================
 
-  const swiperItems = colors.map((color, index) => (
-    <Swiper.Item key={index}>
-      <div className={style.swiperItem} style={{ background: color }}>
-        {index + 1}
-      </div>
+  const navRight = <div className={style.region} onClick={() => {
+    props.history.push('/city')
+  }}>地区</div>
+
+  // 轮播
+  const swiperItems = carouselItems.map((item) => (
+    <Swiper.Item key={item.cid}>
+      <Image className={style.swiperItem} src={base_url + item.img} fit='cover' lazy />
     </Swiper.Item>
   ))
 
+  // 推荐商品
   const recommendTabs = recommend.map((item) => {
     return (
       <Tabs.Tab
@@ -111,6 +133,11 @@ function Index (props) {
         </div>
       </Tabs.Tab>
     )
+  })
+
+  // 首页推荐
+  const indexItems = recommendedItems.map(item => {
+    return <ProductItem></ProductItem>
   })
 
   return (
@@ -170,7 +197,7 @@ function Index (props) {
             </div>
           </Floor>
 
-          <Floor floorTitle='首页推荐/1F' rightWriting='更多'>
+          <Floor floorTitle='首页推荐' rightWriting='更多'>
             <div className={style.floorBd}>
               <ProductItem></ProductItem>
               <ProductItem></ProductItem>
@@ -179,7 +206,7 @@ function Index (props) {
               <ProductItem></ProductItem>
             </div>
           </Floor>
-          <Floor floorTitle='首页推荐/1F' rightWriting='更多'>
+          <Floor floorTitle='最新上架' rightWriting='更多'>
             <div className={style.floorBd}>
               <ProductItem></ProductItem>
               <ProductItem></ProductItem>
@@ -188,7 +215,7 @@ function Index (props) {
               <ProductItem></ProductItem>
             </div>
           </Floor>
-          <Floor floorTitle='首页推荐/1F' rightWriting='更多'>
+          <Floor floorTitle='热销单品' rightWriting='更多'>
             <div className={style.floorBd}>
               <ProductItem></ProductItem>
               <ProductItem></ProductItem>
@@ -222,4 +249,15 @@ function Index (props) {
   )
 }
 
-export default withViewStyle(Index)
+const mapStateToProps = (state) => {
+  return {
+    indexDataList: state.indexDataReducer.indexData
+  }
+}
+
+const mapDispatchToProps = {
+  getIndexData
+}
+
+export default withViewStyle(connect(mapStateToProps, mapDispatchToProps)(Index))
+

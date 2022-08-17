@@ -5,6 +5,7 @@ import Index from '../views'
 import Cart from '../views/Cart'
 import Category from '../views/Category'
 import Mine from '../views/Mine'
+import City from '../views/City'
 
 export default function index (props) {
   return (
@@ -15,6 +16,7 @@ export default function index (props) {
           <Route path='/category' component={Category}></Route>
           <Route path='/cart' component={Cart}></Route>
           <Route path='/mine' component={Mine}></Route>
+          <Route path='/city' component={City}></Route>
 
           <Redirect from='/' to='/index' exact />
         </Switch>

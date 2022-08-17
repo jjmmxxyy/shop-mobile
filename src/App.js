@@ -1,14 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import MyRouter from './router/index'
 import Footer from './components/Footer'
 
 import './style/base.css'
 
-export default function App() {
+function App (props) {
   return (
     <div>
-      <MyRouter>{<Footer />}</MyRouter>
+      <MyRouter>{props.isShow && <Footer />}</MyRouter>
     </div>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isShow: state.footerReducer.isFooterShow
+  }
+}
+
+export default connect(mapStateToProps)(App)
