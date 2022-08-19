@@ -103,9 +103,17 @@
           border-radius: var(--product-radius);
           box-shadow: 0 0 .2rem .2rem #ddd;
 
+          .productImg {
+            width: 100%;
+            height: 8.6rem
+          }
+
           .productTitle {
             margin: var(--base-margin-sm) 0;
             font-size: var(--adm-font-size-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
 
           .productBottom {
@@ -120,6 +128,10 @@
 
               i {
                 font-style: normal;
+                font-size: var(--base-font-size-sm);
+              }
+
+              .productPricePoint {
                 font-size: var(--base-font-size-sm);
               }
             }

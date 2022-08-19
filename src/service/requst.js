@@ -21,6 +21,7 @@ instance.interceptors.request.use(
       icon: 'loading',
       content: '加载中…',
       duration: 0,
+      maskClickable: false
     })
 
     // 因为发送请求,发送请求的数据格式(json,form-data)
@@ -43,15 +44,15 @@ instance.interceptors.request.use(
       })
       delete config.params
     }
+
+
     return config
   },
 
   (error) => {
-    // 请求失败
-    Toast.show({
-      icon: 'fail',
-      content: error,
-    })
+    // 清除加载组件
+    Toast.clear()
+
 
     return Promise.reject(error)
   }
@@ -60,7 +61,6 @@ instance.interceptors.request.use(
 //响应结果后的拦截
 instance.interceptors.response.use(
   (result) => {
-
     // 清除加载组件
     Toast.clear()
 
@@ -68,6 +68,9 @@ instance.interceptors.response.use(
     return result.data
   },
   (error) => {
+    // 清除加载组件
+    Toast.clear()
+
     // 响应失败
     if (error && error.response) {
       switch (error.response.status) {
@@ -75,13 +78,17 @@ instance.interceptors.response.use(
           Toast.show({
             icon: 'fail',
             content: '请求错误',
+            duration: 1000,
+            maskClickable: false
           })
           break;
 
         default:
           Toast.show({
             icon: 'fail',
-            content: '请求错误',
+            content: '网络错误',
+            duration: 1000,
+            maskClickable: false
           })
           break;
       }

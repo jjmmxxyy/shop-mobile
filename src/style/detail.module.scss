@@ -1,0 +1,50 @@
+.container {
+  height: 100rem;
+  background-color: salmon;
+
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: var(--base-color-white);
+
+    .navbar-right {
+      position: absolute;
+      display: flex;
+      justify-content: flex-end;
+      top: 50%;
+      right: 0;
+      width: 84%;
+      transform: translateY(-50%);
+      filter: invert(0%);
+
+      .navbar-item {
+        margin-right: var(--base-margin-sm);
+        flex-shrink: 0;
+      }
+
+      .search-box {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
+
+        .search-bar {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          max-width: 100%;
+          min-width: 2.2rem;
+          padding-left: .4rem;
+          height: 100%;
+          border-radius: 3rem;
+
+          .sreach-font {
+            font-size: var(--base-font-size);
+            margin-left: var(--base-margin-sm);
+          }
+        }
+      }
+    }
+  }
+}

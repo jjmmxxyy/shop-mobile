@@ -1,7 +1,8 @@
 import request from '../service/requst'
 
 const productApi = {
-  indexData: 'data/product/index.php' // 首页数据
+  indexData: 'data/product/index.php', // 首页数据
+  productList: 'data/product/list.php', // 商品列表
 }
 
 /**
@@ -12,6 +13,19 @@ const productApi = {
 export const getIndexDataList = (params) => {
   return request({
     url: productApi.indexData,
+    method: 'get',
+    params,
+  })
+}
+
+/**
+ * 商品列表
+ * @param {*} params 
+ * @returns 
+ */
+export const getProductDataList = (params) => {
+  return request({
+    url: productApi.productList,
     method: 'get',
     params,
   })

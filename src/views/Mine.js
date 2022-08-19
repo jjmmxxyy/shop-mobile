@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { NavBar, Avatar } from 'antd-mobile'
-import { SetOutline, StarOutline, CheckCircleOutline, ClockCircleOutline, BankcardOutline, ShopbagOutline, MailOpenOutline, HandPayCircleOutline, ChatAddOutline, PhonebookOutline } from 'antd-mobile-icons'
+import { SetOutline, StarOutline, CheckCircleOutline, ClockCircleOutline, BankcardOutline, ShopbagOutline, MailOpenOutline, HandPayCircleOutline, ChatAddOutline, PhonebookOutline, EnvironmentOutline, SoundOutline, MessageOutline, KoubeiOutline, QuestionCircleOutline, StopOutline, HistogramOutline } from 'antd-mobile-icons'
 import { withViewStyle } from '../HOC/withViewStyle'
 
 import style from '../style/mine.module.scss'
@@ -62,6 +62,51 @@ function Mine () {
     },
   ]
 
+  // 常用功能
+  const offenItem = [
+    {
+      key: 'address',
+      title: '收货地址',
+      icon: <EnvironmentOutline fontSize={26} />,
+    },
+    {
+      key: 'service',
+      title: '客服',
+      icon: <PhonebookOutline fontSize={26} />,
+    },
+    {
+      key: 'evaluate',
+      title: '我的评价',
+      icon: <MessageOutline fontSize={26} />,
+    },
+    {
+      key: 'about',
+      title: '关于优购',
+      icon: <QuestionCircleOutline fontSize={26} />,
+    },
+    {
+      key: 'help',
+      title: '帮助与反馈',
+      icon: <KoubeiOutline fontSize={26} />,
+    },
+    {
+      key: 'modle',
+      title: '模式切换',
+      icon: <StopOutline fontSize={26} />,
+    },
+    {
+      key: 'currency',
+      title: '通用',
+      icon: <HistogramOutline fontSize={26} />,
+    },
+    {
+      key: 'notice',
+      title: '消息通知',
+      icon: <SoundOutline fontSize={26} />,
+    },
+  ]
+
+  // 我的功能
   const functionList = functionItem.map(item => {
     return <div className={style['card-item']} key={item.key}>
       {item.icon}
@@ -69,7 +114,16 @@ function Mine () {
     </div>
   })
 
+  // 我的订单
   const orderList = orderItem.map(item => {
+    return <div className={style['card-item']} key={item.key}>
+      {item.icon}
+      <p className={style['card-title']}>{item.title}</p>
+    </div>
+  })
+
+  // 常用功能
+  const offenList = offenItem.map(item => {
     return <div className={style['card-item']} key={item.key}>
       {item.icon}
       <p className={style['card-title']}>{item.title}</p>
@@ -109,10 +163,15 @@ function Mine () {
 
       {/* 我的订单 */}
       <div className={`${style['order']} ${style['mine-card']}`}>
-        <div className={style['order-title']}>我的订单</div>
+        <div className={style['title']}>我的订单</div>
         {orderList}
       </div>
 
+      {/* 常用功能 */}
+      <div className={`${style['mine-card']} ${style['offen']}`}>
+        <div className={style['title']}>常用功能</div>
+        {offenList}
+      </div>
     </div>
   </>
 }

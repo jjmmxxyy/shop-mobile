@@ -6,12 +6,13 @@ import { withViewStyle } from '../HOC/withViewStyle'
 
 import SubNav from './index/SubNav'
 import Floor from './index/Floor'
-import ProductItem from './index/ProductItem'
+import ProductItem from '../components/ProductItem'
 import RecommendItem from './index/RecommendItem'
 import Brand from './index/Brand'
 
 import style from '../style/index.module.scss'
 import { getIndexData } from '../redux/actionCreator/indexDataActionCreator'
+import { getProductList } from '../redux/actionCreator/productListActionCreator'
 
 
 function Index (props) {
@@ -19,23 +20,25 @@ function Index (props) {
   // 资源服务器地址
   const base_url = 'http://www.codeboy.com:9999/'
 
-  const { getIndexData, indexDataList } = props
+  const { getIndexData, indexDataList, getProductList, recommendBrandList } = props
   const { carouselItems, newArrivalItems, recommendedItems, topSaleItems } = indexDataList // 需要的列表数据
 
-  const colors = ['#ace0ff', '#bcffbd', '#e4fabd', '#ffcfac'] // 测试
   // 推荐标题
   const recommend = [
     {
       id: 1,
       title: '联想',
+      key: '联想'
     },
     {
       id: 2,
       title: '苹果',
+      key: 'Apple'
     },
     {
       id: 3,
       title: '小米',
+      key: 'xiaomi'
     },
   ]
 
@@ -89,16 +92,28 @@ function Index (props) {
 
   const [subVisible, setSubVisible] = useState(false)
 
+
+  // 首页数据
   useEffect(() => {
-    console.log('indexDataList:', indexDataList)
     if (indexDataList.length === 0) {
       getIndexData()
     }
+    if (recommendBrandList.length === 0) {
+      getProductList()
+    }
+  }, [indexDataList, recommendBrandList])
 
-  }, [indexDataList])
 
   const showSubNav = () => {
     setSubVisible(true)
+  }
+
+  const clickBrandTab = (index) => {
+    console.log('recommendBrand', recommend[index - 1].key)
+    let currentTab = recommend[index - 1].key
+    recommendBrandList.filters(item => {
+      item.title.toUpperCase().includes(currentTab.toUpperCase())
+    })
   }
 
   // ==============================================ReactNode====================================================
@@ -108,14 +123,14 @@ function Index (props) {
   }}>地区</div>
 
   // 轮播
-  const swiperItems = carouselItems.map((item) => (
+  const swiperItems = carouselItems?.map((item) => (
     <Swiper.Item key={item.cid}>
       <Image className={style.swiperItem} src={base_url + item.img} fit='cover' lazy />
     </Swiper.Item>
   ))
 
   // 推荐商品
-  const recommendTabs = recommend.map((item) => {
+  const recommendTabs = recommend?.map((item) => {
     return (
       <Tabs.Tab
         style={{
@@ -136,8 +151,18 @@ function Index (props) {
   })
 
   // 首页推荐
-  const indexItems = recommendedItems.map(item => {
-    return <ProductItem></ProductItem>
+  const indexItems = recommendedItems?.map(item => {
+    return <ProductItem title={item.title} key={item.pid} price={item.price} proImg={base_url + item.pic} />
+  })
+
+  // 最新上架
+  const newItems = newArrivalItems?.map(item => {
+    return <ProductItem title={item.title} key={item.pid} price={item.price} proImg={base_url + item.pic} />
+  })
+
+  // 热销单品
+  const hotItems = topSaleItems?.map(item => {
+    return <ProductItem title={item.title} key={item.pid} price={item.price} proImg={base_url + item.pic} />
   })
 
   return (
@@ -181,16 +206,15 @@ function Index (props) {
         <div className={style.main}>
           {/* 推荐商品 */}
           <Floor
-            floorTitle='推荐商品'
+            floorTitle='推荐品牌'
             rightWriting='全部'
             rightClick={() => {
               props.history.push('/brand')
             }}>
             <div className={style.floorBd}>
               <Tabs
-                defaultActiveKey='1'
                 onChange={(e) => {
-                  console.log('e', e)
+                  clickBrandTab(e)
                 }}>
                 {recommendTabs}
               </Tabs>
@@ -199,29 +223,17 @@ function Index (props) {
 
           <Floor floorTitle='首页推荐' rightWriting='更多'>
             <div className={style.floorBd}>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
+              {indexItems}
             </div>
           </Floor>
           <Floor floorTitle='最新上架' rightWriting='更多'>
             <div className={style.floorBd}>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
+              {newItems}
             </div>
           </Floor>
           <Floor floorTitle='热销单品' rightWriting='更多'>
             <div className={style.floorBd}>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
-              <ProductItem></ProductItem>
+              {hotItems}
             </div>
           </Floor>
 
@@ -251,12 +263,14 @@ function Index (props) {
 
 const mapStateToProps = (state) => {
   return {
-    indexDataList: state.indexDataReducer.indexData
+    indexDataList: state.indexDataReducer.indexData,
+    recommendBrandList: state.productListReducer.productListData
   }
 }
 
 const mapDispatchToProps = {
-  getIndexData
+  getIndexData,
+  getProductList
 }
 
 export default withViewStyle(connect(mapStateToProps, mapDispatchToProps)(Index))
