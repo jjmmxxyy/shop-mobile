@@ -72,7 +72,12 @@ function Cart () {
         {testtest ? cartListCard : cartNull}
 
         {/* 底部合计 */}
-        <div className={style['footer']}></div>
+        <div className={style['footer']}>
+            <div className={style['footer-left']}></div>
+            <div className={style['footer-right']}>
+                ;
+            </div>
+        </div>
       </div>
     </>
   )

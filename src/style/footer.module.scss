@@ -9,6 +9,7 @@
     height: 4.4rem;
     background-color: var(--base-color-white);
     box-shadow: 0 .2rem .6rem .2rem #ddd;
+    z-index: 99;
 
     .footerLi {
         display: flex;
