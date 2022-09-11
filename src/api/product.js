@@ -2,7 +2,7 @@ import request from '../service/requst'
 
 const productApi = {
   indexData: 'data/product/index.php', // 首页数据
-  productList: 'data/product/list.php', // 商品列表
+  productList: 'data/product/list.php', // 推荐商品列表
 }
 
 /**
@@ -19,7 +19,7 @@ export const getIndexDataList = (params) => {
 }
 
 /**
- * 商品列表
+ * 推荐商品列表
  * @param {*} params 
  * @returns 
  */

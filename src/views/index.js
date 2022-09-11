@@ -4,6 +4,9 @@ import { NavBar, Popup, Swiper, Image, Tabs } from 'antd-mobile'
 import { UnorderedListOutline, SearchOutline } from 'antd-mobile-icons'
 import { withViewStyle } from '../HOC/withViewStyle'
 
+import { getProductDataList } from '../api/product'
+
+
 import SubNav from './index/SubNav'
 import Floor from './index/Floor'
 import ProductItem from '../components/ProductItem'
@@ -37,8 +40,8 @@ function Index (props) {
     },
     {
       id: 3,
-      title: '小米',
-      key: 'xiaomi'
+      title: '戴尔',
+      key: '戴尔'
     },
   ]
 
@@ -90,30 +93,34 @@ function Index (props) {
     isMessage: true
   }]
 
-  const [subVisible, setSubVisible] = useState(false)
+  const [subVisible, setSubVisible] = useState(false) // 控制侧边栏显示隐藏
+  const [recommendList, setRecommendList] = useState([]) // 控制侧边栏显示隐藏
 
 
   // 首页数据
   useEffect(() => {
-    if (indexDataList.length === 0) {
+    console.log('props', props);
+    console.log('indexDataList', indexDataList);
+
+    if (JSON.stringify(indexDataList) === "{}") { // 首页数据
       getIndexData()
     }
-    if (recommendBrandList.length === 0) {
-      getProductList()
+
+    if (!recommendBrandList.data) { // 推荐品牌
+      getProductList(recommend[0].key) // 获取推荐品牌
     }
   }, [indexDataList, recommendBrandList])
 
 
+  // 点击顶部左边按钮触发
   const showSubNav = () => {
     setSubVisible(true)
   }
 
+  // tab栏切换事件
   const clickBrandTab = (index) => {
-    console.log('recommendBrand', recommend[index - 1].key)
     let currentTab = recommend[index - 1].key
-    recommendBrandList.filters(item => {
-      item.title.toUpperCase().includes(currentTab.toUpperCase())
-    })
+    getProductList(currentTab) // 获取推荐数据列表
   }
 
   // ==============================================ReactNode====================================================
@@ -139,11 +146,16 @@ function Index (props) {
         title={item.title}
         key={item.id}>
         <div className={style.recommendList}>
+          {
+            recommendBrandList.data ? recommendBrandList.data.map(item => {
+              return <RecommendItem key={item.lid}></RecommendItem>
+            }) : ""
+          }
+
+          {/* <RecommendItem></RecommendItem>
           <RecommendItem></RecommendItem>
           <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem>
+          <RecommendItem></RecommendItem> */}
           <div className={style.recommendMore}>查看更多</div>
         </div>
       </Tabs.Tab>
@@ -262,15 +274,16 @@ function Index (props) {
 }
 
 const mapStateToProps = (state) => {
+
   return {
     indexDataList: state.indexDataReducer.indexData,
-    recommendBrandList: state.productListReducer.productListData
+    recommendBrandList: state.productListReducer.productListData // 推荐品牌数据
   }
 }
 
 const mapDispatchToProps = {
   getIndexData,
-  getProductList
+  getProductList // 推荐数据列表
 }
 
 export default withViewStyle(connect(mapStateToProps, mapDispatchToProps)(Index))

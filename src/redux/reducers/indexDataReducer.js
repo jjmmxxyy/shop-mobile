@@ -1,5 +1,5 @@
 const indexDataReducer = (prevState = {
-  indexData: []
+  indexData: {}
 }, actions) => {
   const newState = JSON.parse(JSON.stringify(prevState))
   switch (actions.type) {

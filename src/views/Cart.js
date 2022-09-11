@@ -9,9 +9,9 @@ import resources from '../mock/resources'
 
 function Cart () {
   const { header, cartList } = resources.cart
-  const testtest = true
+  const testtest = true // 测试使用，控制购物车是否为空
 
-  const [cartValue, setCartValue] = useState([]);
+  const [cartValue, setCartValue] = useState([])
 
   // ==============================================ReactNode====================================================
 
@@ -73,10 +73,12 @@ function Cart () {
 
         {/* 底部合计 */}
         <div className={style['footer']}>
-            <div className={style['footer-left']}></div>
-            <div className={style['footer-right']}>
-                ;
-            </div>
+          <div className={style['footer-left']}>
+            <Checkbox />
+          </div>
+          <div className={style['footer-right']}>
+
+          </div>
         </div>
       </div>
     </>
