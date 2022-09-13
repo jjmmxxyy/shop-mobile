@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import footerReducer from './reducers/footerReducer'
 import indexDataReducer from './reducers/indexDataReducer'
-import productListReducer from './reducers/productListReducer'
+import cartListReducer from './reducers/cartListReducer'
 
 import thunk from 'redux-thunk'
 
@@ -19,7 +19,7 @@ const persistConfig = {
 const reducer = combineReducers({
   footerReducer, // 底部标签栏
   indexDataReducer, // 首页数据
-  productListReducer, // 商品列表数据
+  cartListReducer // 购物车数据
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

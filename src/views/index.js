@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { NavBar, Popup, Swiper, Image, Tabs } from 'antd-mobile'
+import { NavBar, Popup, Swiper, Image, Tabs, PullToRefresh } from 'antd-mobile'
 import { UnorderedListOutline, SearchOutline } from 'antd-mobile-icons'
 import { withViewStyle } from '../HOC/withViewStyle'
 
@@ -15,7 +15,6 @@ import Brand from './index/Brand'
 
 import style from '../style/index.module.scss'
 import { getIndexData } from '../redux/actionCreator/indexDataActionCreator'
-import { getProductList } from '../redux/actionCreator/productListActionCreator'
 
 
 function Index (props) {
@@ -23,7 +22,7 @@ function Index (props) {
   // 资源服务器地址
   const base_url = 'http://www.codeboy.com:9999/'
 
-  const { getIndexData, indexDataList, getProductList, recommendBrandList } = props
+  const { getIndexData, indexDataList } = props
   const { carouselItems, newArrivalItems, recommendedItems, topSaleItems } = indexDataList // 需要的列表数据
 
   // 推荐标题
@@ -94,33 +93,52 @@ function Index (props) {
   }]
 
   const [subVisible, setSubVisible] = useState(false) // 控制侧边栏显示隐藏
-  const [recommendList, setRecommendList] = useState([]) // 控制侧边栏显示隐藏
+  const [recommendList, setRecommendList] = useState([]) // 推荐列表
 
 
   // 首页数据
   useEffect(() => {
-    console.log('props', props);
-    console.log('indexDataList', indexDataList);
 
-    if (JSON.stringify(indexDataList) === "{}") { // 首页数据
+    if (JSON.stringify(indexDataList) === "{}") { // 首页数据为空
       getIndexData()
     }
 
-    if (!recommendBrandList.data) { // 推荐品牌
-      getProductList(recommend[0].key) // 获取推荐品牌
+    if (recommendList.length === 0) { // 推荐品牌为空
+      getRecommendList(recommend[0].key) // 获取推荐数据列表 
     }
-  }, [indexDataList, recommendBrandList])
+
+  }, [indexDataList, recommendList])
 
 
-  // 点击顶部左边按钮触发
+  /**
+   * 点击顶部左边按钮触发
+   */
   const showSubNav = () => {
     setSubVisible(true)
   }
 
-  // tab栏切换事件
-  const clickBrandTab = (index) => {
+  /**
+   * tab栏切换事件
+   * @param {*} index 
+   */
+  const clickBrandTab = async (index) => {
     let currentTab = recommend[index - 1].key
-    getProductList(currentTab) // 获取推荐数据列表
+    getRecommendList(currentTab)
+
+  }
+
+  /**
+   * 获取对应的推荐数据
+   * @param {*} kw 
+   */
+  const getRecommendList = async (kw) => {
+    const param = {
+      pno: 1,
+      count: 6,
+      kw
+    }
+    const res = await getProductDataList(param)
+    setRecommendList(res.data)
   }
 
   // ==============================================ReactNode====================================================
@@ -147,15 +165,11 @@ function Index (props) {
         key={item.id}>
         <div className={style.recommendList}>
           {
-            recommendBrandList.data ? recommendBrandList.data.map(item => {
-              return <RecommendItem key={item.lid}></RecommendItem>
+            recommendList ? recommendList.map(item => {
+              return <RecommendItem key={item.lid} pic={base_url + item.pic} title={item.title}></RecommendItem>
             }) : ""
           }
 
-          {/* <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem>
-          <RecommendItem></RecommendItem> */}
           <div className={style.recommendMore}>查看更多</div>
         </div>
       </Tabs.Tab>
@@ -178,7 +192,9 @@ function Index (props) {
   })
 
   return (
-    <>
+    <PullToRefresh onRefresh={async () => {
+      getIndexData()
+    }}>
       {/* 顶栏 */}
       <NavBar className={style.navbar} backArrow={<UnorderedListOutline />} right={navRight} onBack={showSubNav}>
         <div className={style.searchBar}>
@@ -223,7 +239,7 @@ function Index (props) {
             rightClick={() => {
               props.history.push('/brand')
             }}>
-            <div className={style.floorBd}>
+            <div className={`${style['floorBd']}`}>
               <Tabs
                 onChange={(e) => {
                   clickBrandTab(e)
@@ -269,7 +285,7 @@ function Index (props) {
         bodyStyle={{ minWidth: '60vw' }}>
         <SubNav></SubNav>
       </Popup>
-    </>
+    </PullToRefresh>
   )
 }
 
@@ -277,13 +293,11 @@ const mapStateToProps = (state) => {
 
   return {
     indexDataList: state.indexDataReducer.indexData,
-    recommendBrandList: state.productListReducer.productListData // 推荐品牌数据
   }
 }
 
 const mapDispatchToProps = {
   getIndexData,
-  getProductList // 推荐数据列表
 }
 
 export default withViewStyle(connect(mapStateToProps, mapDispatchToProps)(Index))

@@ -4,6 +4,7 @@ const footerReducer = (prevState = {
   const newState = JSON.parse(JSON.stringify(prevState))
   switch (actions.type) {
     case 'footerShow':
+
       newState.isFooterShow = true
       return newState
       break

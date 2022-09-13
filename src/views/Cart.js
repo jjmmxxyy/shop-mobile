@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import { RightOutline } from 'antd-mobile-icons'
 import { Image, Checkbox } from 'antd-mobile'
 import { withViewStyle } from '../HOC/withViewStyle'
@@ -6,12 +7,21 @@ import MiniCard from '../components/MiniCard'
 
 import style from '../style/cart.module.scss'
 import resources from '../mock/resources'
+import { getCartListData } from '../redux/actionCreator/carListActionCreator'
 
-function Cart () {
-  const { header, cartList } = resources.cart
+function Cart (props) {
+  const { header, cartList } = resources.cart // 资源
+  const { getCartListData, cartListData } = props // 获取购物车数据方法、购物车列表数据
   const testtest = true // 测试使用，控制购物车是否为空
 
-  const [cartValue, setCartValue] = useState([])
+  const [selectedArr, setSelectedArr] = useState([]) // 选中的商品
+
+  useEffect(() => {
+    if (cartListData.length === 0) {
+      getCartListData()
+    }
+    console.log(cartListData)
+  }, [cartListData])
 
   // ==============================================ReactNode====================================================
 
@@ -23,39 +33,43 @@ function Cart () {
   </div>
 
   // 购物车有数据
-  const cartListCard = <div className={style['cart-list']}>
-    <Checkbox.Group
-      value={cartValue}
-      onChange={v => {
-        console.log(v)
-      }}
-    >
-      <div className={style['cart-list-item']}>
-        <div className={style['cart-item-hd']}>
-          XXX旗舰店
-          <RightOutline fontSize={12} />
-        </div>
-        <div className={style['cart-item-bd']}>
-          <Checkbox />
-          <Image className={style['cart-item-img']} src={cartList.nothingImg} width={90} height={90} fit='fill' lazy />
-          <div className={style['cart-item-detail']}>
-            <h4 className={style['cart-item-title']}>标题标题标题标题标题标题标题</h4>
-            <span className={style['cart-item-sku']}>黑色黑色黑色黑色</span>
-            <div className={style['cart-item-tags']}>
-              <span>3期免息</span>
-              <span>库存紧张</span>
-            </div>
-            <div className={style['cart-item-footer']}>
-              <div className={style['cart-item-footer-price']}>
-                <span><i>￥</i>10459</span>
+  const cartListCard = cartListData.map(item => {
+
+    return (<div div className={style['cart-list']} key={item.cartid}>
+      <Checkbox.Group
+        value={cartListData}
+        onChange={v => {
+          console.log(v)
+        }}
+      >
+        <div className={style['cart-list-item']}>
+          <div className={style['cart-item-hd']}>
+            {item.shopName}
+            <RightOutline fontSize={12} />
+          </div>
+          <div className={style['cart-item-bd']}>
+            <Checkbox />
+            <Image className={style['cart-item-img']} src={item.pic} width={90} height={90} fit='fill' lazy />
+            <div className={style['cart-item-detail']}>
+              <h4 className={style['cart-item-title']}>{item.title}</h4>
+              <span className={style['cart-item-sku']}>{item.spec.join('、')}</span>
+              <div className={style['cart-item-tags']}>
+                {item.lable.map((lableTitle, index) => {
+                  return (<span key={index}>{lableTitle}</span>)
+                })}
               </div>
-              <div className={style['cart-item-footer-number']}>×1</div>
+              <div className={style['cart-item-footer']}>
+                <div className={style['cart-item-footer-price']}>
+                  <span><i>￥</i>{item.price}</span>
+                </div>
+                <div className={style['cart-item-footer-number']}>×{item.count}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Checkbox.Group>
-  </div>
+      </Checkbox.Group>
+    </div>)
+  })
 
   return (
     <>
@@ -74,10 +88,15 @@ function Cart () {
         {/* 底部合计 */}
         <div className={style['footer']}>
           <div className={style['footer-left']}>
-            <Checkbox />
+            <Checkbox indeterminate={cartListData.length > 0 && cartListData.length} />
+            <div className={style['checkbox-lable']}>全选</div>
           </div>
           <div className={style['footer-right']}>
-
+            <div className={style['total']}>
+              <span className={style['total-text']}>合计:</span>
+              <span className={style['total-price']}>￥<b>5550</b></span>
+            </div>
+            <div className={style['settlement-btn']}>结算</div>
           </div>
         </div>
       </div>
@@ -85,4 +104,16 @@ function Cart () {
   )
 }
 
-export default withViewStyle(Cart)
+const mapStateToProps = (state) => {
+
+  return {
+    cartListData: state.cartListReducer.cartData,
+  }
+}
+
+const mapDispatchToProps = {
+  getCartListData,
+}
+
+
+export default withViewStyle(connect(mapStateToProps, mapDispatchToProps)(Cart))
