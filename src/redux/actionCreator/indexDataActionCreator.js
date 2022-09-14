@@ -1,12 +1,10 @@
 import { getIndexDataList } from '../../api/product'
 export function getIndexData () {
-  return (dispatch) => {
-    getIndexDataList().then(res => {
-
-      dispatch({
-        type: 'indexDataChange',
-        payload: res
-      })
+  return async (dispatch) => {
+    const res = await getIndexDataList()
+    dispatch({
+      type: 'indexDataChange',
+      payload: res
     })
   }
 }

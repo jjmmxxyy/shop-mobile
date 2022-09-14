@@ -16,7 +16,8 @@ export default {
         count: 1,
         pic: "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i1/379092568/O1CN01q6OBOd1UqBruof0tS_!!379092568.jpg_430x430q90.jpg",
         shopName: '牛批电脑',
-        lable: ['3期免息', '库存紧张']
+        lable: ['3期免息', '库存紧张'],
+        isChecked: false
       }, {
         cartid: 2,
         lid: 17,
@@ -26,7 +27,8 @@ export default {
         count: 2,
         pic: "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/2745641605/O1CN01TkS7zB1Nj8SIfmE07_!!2745641605.jpg_430x430q90.jpg",
         shopName: '牛批电脑',
-        lable: ['3期免息']
+        lable: ['3期免息'],
+        isChecked: true
       }, {
         cartid: 3,
         lid: 221,
@@ -36,7 +38,8 @@ export default {
         count: 1,
         pic: "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i4/379092568/O1CN01OOFyCS1UqBpl8UqfK_!!379092568.jpg_430x430q90.jpg",
         shopName: '超级科技',
-        lable: ['3期免息', '8折优惠']
+        lable: ['3期免息', '8折优惠'],
+        isChecked: true
       }]
     }
   }
